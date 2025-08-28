@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: mertarican
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: se_project
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      POSTGRES_URL: postgres://mertarican:secret@db:5432/se_project?sslmode=disable
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
+
